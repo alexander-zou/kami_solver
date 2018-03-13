@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-
+#include <chrono>
 #include <set>
 
 #include "kami_state.h"
@@ -63,6 +63,7 @@ int main( int argc, char **argv)
     } else {
         state = KamiState::read_state( cin);
     }
+    auto start_time = chrono::high_resolution_clock::now();
     Result result[ MAX_STEP];
     for ( int max_step = 1; max_step <= MAX_STEP; max_step ++) {
         cout << "trying to solve in " << max_step << " step(s)..." << endl;
@@ -79,6 +80,9 @@ int main( int argc, char **argv)
             break;
         }
     }
+    auto finish_time = chrono::high_resolution_clock::now();
+    chrono::duration<double> time_used = finish_time - start_time;
+    cout << "Time Used: " << time_used.count() << " s" << endl;
     return 0;
 }
 
