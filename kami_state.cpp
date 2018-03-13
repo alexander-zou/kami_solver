@@ -3,70 +3,6 @@
 
 using namespace std;
 
-// struct Position:
-
-Position::Position( int id)
-    : x( id / KamiState::WIDTH),
-      y( id % KamiState::WIDTH)
-{
-}
-
-Position::Position( int x, int y)
-    : x( x), y( y)
-{
-}
-
-Position::Position( Position const &other)
-    : x( other.x), y( other.y)
-{
-}
-
-Position::~Position()
-{
-}
-
-Position &
-Position::operator=( Position const &rhs)
-{
-    x = rhs.x;
-    y = rhs.y;
-    return *this;
-}
-
-Position &
-Position::operator=( int id)
-{
-    x = id / KamiState::WIDTH;
-    y = id % KamiState::WIDTH;
-    return *this;
-}
-
-Position::operator bool() const
-{
-    if ( x < 0 || y < 0)
-        return false;
-    if ( x >= KamiState::HEIGHT || y >= KamiState::WIDTH)
-        return false;
-    return true;
-}
-
-bool
-Position::point_left() const
-{
-    return ( x + y) % 2 == 1;
-}
-
-int
-Position::id() const
-{
-    return x * KamiState::WIDTH + y;
-}
-
-// struct Group:
-
-
-// struct KamiState:
-
 KamiState::KamiState()
 {
 }
@@ -136,13 +72,11 @@ KamiState::read_state( istream &in)
     while ( in >> ch) {
         if ( ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r')
             continue;
-        else if ( id >= WIDTH * HEIGHT)
+        else if ( id >= Position::WIDTH * Position::HEIGHT)
             break;
         else {
             if ( ch != BLOCK_COLOR) {
-                int x = id / WIDTH;
-                int y = id % WIDTH;
-                Group group{ ch, { x, y}};
+                Group group{ ch, Position( id)};
                 state.groups.insert( make_pair( id, group));
                 if ( group.position.point_left()) {
                     Position position;
