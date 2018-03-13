@@ -21,6 +21,15 @@ int dfs( KamiState const &original_state, Result *result, int max_step)
         return 0;
     if ( max_step <= 0)
         return -1;
+    // cut impossible state:
+    {
+        set<char> colors;
+        for ( auto const &kv : original_state.groups)
+            colors.insert( kv.second.color);
+        if ( colors.size() > max_step + 1)
+            return -1;
+    }
+
     // for each group:
     for ( auto group_it = original_state.groups.begin(); group_it != original_state.groups.end(); ++ group_it) {
         int gid = group_it->first;
@@ -47,6 +56,20 @@ int dfs( KamiState const &original_state, Result *result, int max_step)
             
             int ret = dfs( state, result + 1, max_step - 1);
             if ( ret >= 0) {
+#if 0 // debug:
+                cout << "-------" << endl;
+                cout << "groups: " << state.groups.size() << endl;
+                for ( auto const &kv : state.groups) {
+                    Position pos( kv.first);
+                    cout << " id: " << kv.first << ", x: " << pos.x << ", y: " << pos.y << ", color: " << kv.second.color << endl;
+                }
+                cout << "edges: " << state.edges.size() << endl;
+                for ( auto const &edge : state.edges) {
+                    cout << " (" << edge.first << "," << edge.second << ")";
+                }
+                cout << endl;
+                cout << "-------" << endl;
+#endif
                 return ret + 1;
             }
         }
