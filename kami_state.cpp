@@ -5,6 +5,42 @@ using namespace std;
 
 // struct Position:
 
+Position::Position( int id)
+    : x( id / KamiState::WIDTH),
+      y( id % KamiState::HEIGHT)
+{
+}
+
+Position::Position( int x, int y)
+    : x( x), y( y)
+{
+}
+
+Position::Position( Position const &other)
+    : x( other.x), y( other.y)
+{
+}
+
+Position::~Position()
+{
+}
+
+Position &
+Position::operator=( Position const &rhs)
+{
+    x = rhs.x;
+    y = rhs.y;
+    return *this;
+}
+
+Position &
+Position::operator=( int id)
+{
+    x = id / KamiState::WIDTH;
+    y = id % KamiState::WIDTH;
+    return *this;
+}
+
 Position::operator bool() const
 {
     if ( x < 0 || y < 0)

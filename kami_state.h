@@ -15,6 +15,7 @@ struct Position {
     Position( int id = 0);
     ~Position();
     Position &operator=( Position const &rhs);
+    Position &operator=( int id);
     operator bool() const;
     bool point_left() const;
     int id() const;
@@ -28,8 +29,8 @@ struct Group {
 };
 
 struct KamiState {
-    static constexpr int HEIGHT = 5;//19;
-    static constexpr int WIDTH = 4;//10;
+    static constexpr int HEIGHT = 19;
+    static constexpr int WIDTH = 10;
 
     map< int, Group> groups;
     set< Edge> edges;
