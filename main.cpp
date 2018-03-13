@@ -72,7 +72,8 @@ int main( int argc, char **argv)
             cout << "\t---------------------" << endl;
             for ( int i = 0; i < ret; i ++) {
                 Position pos( result[ i].gid);
-                cout << "\t( " << pos.x << " , " << pos.y << " ) -> " << result[ i].color << endl;
+                cout << "\t( " << pos.x + 1 << " , " << pos.y + 1 << " ) -> "
+                    << result[ i].color << endl;
             }
             cout << "\t---------------------" << endl;
             break;

@@ -29,8 +29,9 @@ struct Group {
 };
 
 struct KamiState {
-    static constexpr int HEIGHT = 19;
+    static constexpr int HEIGHT = 29;
     static constexpr int WIDTH = 10;
+    static constexpr char BLOCK_COLOR = '*';
 
     map< int, Group> groups;
     set< Edge> edges;

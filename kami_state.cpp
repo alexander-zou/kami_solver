@@ -7,7 +7,7 @@ using namespace std;
 
 Position::Position( int id)
     : x( id / KamiState::WIDTH),
-      y( id % KamiState::HEIGHT)
+      y( id % KamiState::WIDTH)
 {
 }
 
@@ -139,29 +139,31 @@ KamiState::read_state( istream &in)
         else if ( id >= WIDTH * HEIGHT)
             break;
         else {
-            int x = id / WIDTH;
-            int y = id % WIDTH;
-            Group group{ ch, { x, y}};
-            state.groups.insert( make_pair( id, group));
-            if ( group.position.point_left()) {
-                Position position;
-                position.x = group.position.x - 1;
-                position.y = group.position.y;
-                if ( position)
-                    state.edges.insert( make_pair( position.id(), id));
-            } else {
-                Position position;
-                position.x = group.position.x - 1;
-                position.y = group.position.y;
-                if ( position)
-                    state.edges.insert( make_pair( position.id(), id));
-                position.x = group.position.x;
-                position.y = group.position.y - 1;
-                if ( position)
-                    state.edges.insert( make_pair( position.id(), id));
-            }
+            if ( ch != BLOCK_COLOR) {
+                int x = id / WIDTH;
+                int y = id % WIDTH;
+                Group group{ ch, { x, y}};
+                state.groups.insert( make_pair( id, group));
+                if ( group.position.point_left()) {
+                    Position position;
+                    position.x = group.position.x - 1;
+                    position.y = group.position.y;
+                    if ( position && state.groups.find( position.id()) != state.groups.end())
+                        state.edges.insert( make_pair( position.id(), id));
+                } else { // if ! group.position.point_left():
+                    Position position;
+                    position.x = group.position.x - 1;
+                    position.y = group.position.y;
+                    if ( position && state.groups.find( position.id()) != state.groups.end())
+                        state.edges.insert( make_pair( position.id(), id));
+                    position.x = group.position.x;
+                    position.y = group.position.y - 1;
+                    if ( position && state.groups.find( position.id()) != state.groups.end())
+                        state.edges.insert( make_pair( position.id(), id));
+                } // if tile point to right
+            } // if tile not blocked
             id ++;
-        }
+        } // if color is valid
     }
     state.merge_group();
     return state;
