@@ -15,8 +15,8 @@ public class GameBoard extends JPanel {
 	private static final long serialVersionUID = 4595789757308543556L;
 
 	public static class Position {
-		public int row;
-		public int col;
+		public int row = -1;
+		public int col = -1;
 	};
 	
 	public Color colors[][] = new Color[ MainUi.ROW_COUNT][ MainUi.COL_COUNT];

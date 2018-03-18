@@ -227,6 +227,10 @@ public class MainUi extends JFrame implements KeyListener, ActionListener, Mouse
 		if ( e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
 			for ( int i = 0; i < COLOR_COUNT; i ++)
 				if ( colorText[ i].equals( e.getComponent())) {
+					currRadio = i;
+					if ( currRadio >= 0)
+						colorRadio[ currRadio].setSelected( false);
+					colorRadio[ i].setSelected( true);
 					if ( colorText[ i].getText().equals( "*"))
 						return;
 					Color newColor = JColorChooser.showDialog( this, "Pick Color", colorText[ i].getBackground());
@@ -253,7 +257,8 @@ public class MainUi extends JFrame implements KeyListener, ActionListener, Mouse
 			if ( e.getComponent().equals( boardPanel) && currRadio >= 0) {
 				GameBoard.Position position = new GameBoard.Position();
 				boardPanel.transferPosition( e.getX(), e.getY(), position);
-				updateTile( position.row, position.col, currRadio);
+				if ( position.row >= 0)
+					updateTile( position.row, position.col, currRadio);
 			}
 		}
 	}
