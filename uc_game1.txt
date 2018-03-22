@@ -1,0 +1,41 @@
+YYYYYBBBBB
+YYYY**BBBB
+YYY****BBB
+YY******BB
+Y********B
+**********
+**********
+****BB****
+***BBBB***
+**YRBBYR**
+*YYRRYYRR*
+*YYRRYYRR*
+*YYRRYYRR*
+*YBBRYBBR*
+*BBBBBBBB*
+*YBBRYBBB*
+*YYRRYYBB*
+*YYRRYYBB*
+*YYRRYYBB*
+**YRBBYB**
+***BBBB***
+****BB****
+**********
+**********
+B********R
+BB******RR
+BBB****RRR
+BBBB**RRRR
+BBBBBRRRRR
+
+step:6
+
+	---------------------
+	( 10 , 7 ) : Y -> R
+	( 14 , 3 ) : B -> R
+	( 10 , 4 ) : R -> Y
+	( 10 , 3 ) : Y -> B
+	( 1 , 1 ) : Y -> B
+	( 25 , 10 ) : R -> B
+	---------------------
+

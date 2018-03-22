@@ -11,52 +11,55 @@ constexpr int MAX_STEP = 30;
 
 struct Result {
     int gid;
-    char color;
+    char original_color, color;
 };
 
-// TODO: use foreach instead of iter:
 int dfs( KamiState const &original_state, Result *result, int max_step)
 {
     if ( original_state.groups.size() <= 1)
         return 0;
-    if ( max_step <= 0)
+    set<char> colors;
+    for ( auto const &kv : original_state.groups)
+        colors.insert( kv.second.color);
+    // consider un-connected graph:
+    if ( colors.size() <= 1)
+        return 0;
+    if ( colors.size() > max_step + 1)
         return -1;
-    // cut impossible state:
-    {
-        set<char> colors;
-        for ( auto const &kv : original_state.groups)
-            colors.insert( kv.second.color);
-        if ( colors.size() > max_step + 1)
-            return -1;
-    }
 
+    bool has_usable_color = false;
     // for each group:
-    for ( auto group_it = original_state.groups.begin(); group_it != original_state.groups.end(); ++ group_it) {
-        int gid = group_it->first;
+    for ( auto const &group_kv : original_state.groups) {
+        int gid = group_kv.first;
 
         // list all colors that make sense to change to:
         set<char> usable_colors;
-        for ( auto edge_it = original_state.edges.begin(); edge_it != original_state.edges.end(); ++ edge_it) {
+        for ( auto const &edge_kv : original_state.edges) {
             int adjacent_gid = -1;
-            if ( edge_it->first == gid)
-                adjacent_gid = edge_it->second;
-            else if ( edge_it->second == gid)
-                adjacent_gid = edge_it->first;
-            if ( adjacent_gid >= 0)
+            if ( edge_kv.first == gid)
+                adjacent_gid = edge_kv.second;
+            else if ( edge_kv.second == gid)
+                adjacent_gid = edge_kv.first;
+            if ( adjacent_gid >= 0) {
                 usable_colors.insert( original_state.groups.at( adjacent_gid).color);
-        }
+                has_usable_color = true;
+            }
+        } // for each edge
 
         // try to change to each color:
-        for ( auto it = usable_colors.begin(); it != usable_colors.end(); ++ it) {
+        for ( auto const &color : usable_colors) {
             KamiState state( original_state);
-            state.groups[ gid].color = *it;
-            state.merge_group();
+            Group &group = state.groups[ gid];
+
             result->gid = gid;
-            result->color = *it;
-            
+            result->color = color;
+            result->original_color = group.color;
+
+            group.color = color;
+            state.merge_group();
             int ret = dfs( state, result + 1, max_step - 1);
             if ( ret >= 0) {
-#if 0 // debug:
+#ifdef DEBUG
                 cout << "-------" << endl;
                 cout << "groups: " << state.groups.size() << endl;
                 for ( auto const &kv : state.groups) {
@@ -72,8 +75,31 @@ int dfs( KamiState const &original_state, Result *result, int max_step)
 #endif
                 return ret + 1;
             }
-        }
+        } // for each usable color
+    } // for each group
+
+    // consider un-connected graph:
+    if ( ! has_usable_color) {
+        for ( auto const &group_kv : original_state.groups) {
+            int gid = group_kv.first;
+            for ( auto const &color : colors)
+                if ( group_kv.second.color != color) {
+                    KamiState state( original_state);
+                    Group &group = state.groups[ gid];
+
+                    result->gid = gid;
+                    result->color = color;
+                    result->original_color = group.color;
+
+                    group.color = color;
+                    state.merge_group();
+                    int ret = dfs( state, result + 1, max_step - 1);
+                    if ( ret >= 0)
+                        return ret + 1;
+                }
+        } // for each group
     }
+
     return -1;
 }
 
@@ -96,7 +122,8 @@ int main( int argc, char **argv)
             cout << "\t---------------------" << endl;
             for ( int i = 0; i < ret; i ++) {
                 Position pos( result[ i].gid);
-                cout << "\t( " << pos.x + 1 << " , " << pos.y + 1 << " ) -> "
+                cout << "\t( " << pos.x + 1 << " , " << pos.y + 1 << " ) : "
+                    << result[ i].original_color << " -> "
                     << result[ i].color << endl;
             }
             cout << "\t---------------------" << endl;

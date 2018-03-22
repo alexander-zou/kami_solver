@@ -1,0 +1,41 @@
+GGGGGBBBBB
+GGGG**BBBB
+GGG****BBB
+GG******BB
+G********B
+**********
+**********
+****YG****
+***GGGB***
+**BGGGBY**
+*GBGYGBYB*
+*YBGGGBYG*
+*GBGGGBYB*
+*YBGYGBYG*
+*GBGGGBYB*
+*YBGGGBYG*
+*GBGYGBYB*
+*YBGGGBYG*
+*GBGGGBYB*
+**BGYGBY**
+***GGGB***
+****GG****
+**********
+**********
+Y********G
+YY******GG
+YYY****GGG
+YYYY**GGGG
+YYYYYGGGGG
+
+step:7
+	---------------------
+	( 8 , 6 ) : G -> B
+	( 8 , 6 ) : B -> G
+	( 8 , 6 ) : G -> Y
+	( 8 , 5 ) : Y -> B
+	( 8 , 5 ) : B -> G
+	( 1 , 6 ) : B -> G
+	( 25 , 1 ) : Y -> G
+	---------------------
+
