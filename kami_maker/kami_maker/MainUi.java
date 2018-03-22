@@ -190,8 +190,10 @@ public class MainUi extends JFrame implements KeyListener, ActionListener, Mouse
 						return;
 				}
 				char old = colorText[ i].getText().charAt( 0);
-				String str = outputText.getText();
-				outputText.setText( str.toUpperCase().replace( old, ch));
+				if ( old != '*') {
+					String str = outputText.getText();
+					outputText.setText( str.toUpperCase().replace( old, ch));
+				}
 				colorText[ i].setText( String.valueOf( ch));
 				if ( ch == '*') {
 					colorText[ i].setForeground( Color.BLACK);
@@ -227,10 +229,11 @@ public class MainUi extends JFrame implements KeyListener, ActionListener, Mouse
 		if ( e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
 			for ( int i = 0; i < COLOR_COUNT; i ++)
 				if ( colorText[ i].equals( e.getComponent())) {
-					currRadio = i;
 					if ( currRadio >= 0)
 						colorRadio[ currRadio].setSelected( false);
 					colorRadio[ i].setSelected( true);
+					currRadio = i;
+					colorText[ i].select( 0, 0);
 					if ( colorText[ i].getText().equals( "*"))
 						return;
 					Color newColor = JColorChooser.showDialog( this, "Pick Color", colorText[ i].getBackground());
