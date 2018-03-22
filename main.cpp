@@ -29,9 +29,15 @@ int dfs( KamiState const &original_state, Result *result, int max_step)
         return -1;
 
     bool has_usable_color = false;
+    DistanceMap distance;
+
     // for each group:
     for ( auto const &group_kv : original_state.groups) {
         GID gid = group_kv.first;
+
+        // cut-branch by eccentricity:
+        if ( distance.eccentricity( original_state, gid) > max_step)
+            continue;
 
         // list all colors that make sense to change to:
         set<char> usable_colors;
