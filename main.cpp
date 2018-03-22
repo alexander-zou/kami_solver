@@ -4,13 +4,14 @@
 #include <set>
 
 #include "kami_state.h"
+#include "distance_map.h"
 
 using namespace std;
 
 constexpr int MAX_STEP = 30;
 
 struct Result {
-    int gid;
+    GID gid;
     char original_color, color;
 };
 
@@ -30,12 +31,12 @@ int dfs( KamiState const &original_state, Result *result, int max_step)
     bool has_usable_color = false;
     // for each group:
     for ( auto const &group_kv : original_state.groups) {
-        int gid = group_kv.first;
+        GID gid = group_kv.first;
 
         // list all colors that make sense to change to:
         set<char> usable_colors;
         for ( auto const &edge_kv : original_state.edges) {
-            int adjacent_gid = -1;
+            GID adjacent_gid = -1;
             if ( edge_kv.first == gid)
                 adjacent_gid = edge_kv.second;
             else if ( edge_kv.second == gid)
@@ -81,7 +82,7 @@ int dfs( KamiState const &original_state, Result *result, int max_step)
     // consider un-connected graph:
     if ( ! has_usable_color) {
         for ( auto const &group_kv : original_state.groups) {
-            int gid = group_kv.first;
+            GID gid = group_kv.first;
             for ( auto const &color : colors)
                 if ( group_kv.second.color != color) {
                     KamiState state( original_state);

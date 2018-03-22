@@ -3,7 +3,7 @@
 
 #include "position.h"
 
-class KamiState;
+struct KamiState;
 
 class DistanceMap {
     public:
@@ -16,12 +16,12 @@ class DistanceMap {
             = Position::HEIGHT * Position::WIDTH;
 
         int record[ MAX_GROUP_COUNT][ MAX_GROUP_COUNT];
-        void calculate_distance( KamiState const &state, int gid);
+        void _calculate_distance( KamiState const &state, GID gid);
         
     public:
         DistanceMap();
-        int distance( KamiState const &state, int gid1, int gid2);
-        int eccentricity( KamiState const &state, int gid);
+        int distance( KamiState const &state, GID gid1, GID gid2);
+        int eccentricity( KamiState const &state, GID gid);
 };
 
 #endif

@@ -9,7 +9,7 @@
 
 using namespace std;
 
-typedef pair< int, int> Edge;
+typedef pair< GID, GID> Edge;
 
 struct Group {
     char color;
@@ -19,7 +19,7 @@ struct Group {
 struct KamiState {
     static constexpr char BLOCK_COLOR = '*';
 
-    map< int, Group> groups;
+    map< GID, Group> groups;
     set< Edge> edges;
 
     KamiState();

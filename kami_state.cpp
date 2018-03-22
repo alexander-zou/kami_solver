@@ -32,9 +32,9 @@ KamiState::merge_group()
     do {
         finished = true;
         for ( auto it = edges.begin(); it != edges.end(); ++ it) {
-            int id1 = it->first;
+            GID id1 = it->first;
             Group &g1 = groups[ id1];
-            int id2 = it->second;
+            GID id2 = it->second;
             Group &g2 = groups[ id2];
             if ( g1.color == g2.color) {
                 set<Edge> new_edges;
@@ -68,7 +68,7 @@ KamiState::read_state( istream &in)
 {
     KamiState state;
     char ch;
-    int id = 0;
+    GID id = 0;
     while ( in >> ch) {
         if ( ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r')
             continue;
