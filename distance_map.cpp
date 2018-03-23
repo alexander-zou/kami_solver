@@ -42,6 +42,10 @@ DistanceMap::_calculate_distance( KamiState const &state, GID gid)
         step ++;
         curr_gids = move( next_gids);
     } while ( curr_gids.size());
+    for ( auto const &group_kv : state.groups)
+        if ( group_kv.first != gid && record[ gid][ group_kv.first] == NOT_CALCULATED)
+            record[ gid][ group_kv.first] =
+            record[ group_kv.first][ gid] = UNREACHABLE;
 }
 
 int
