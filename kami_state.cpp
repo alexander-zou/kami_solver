@@ -33,8 +33,10 @@ KamiState::merge_group()
         finished = true;
         for ( auto it = edges.begin(); it != edges.end(); ++ it) {
             GID id1 = it->first;
-            Group &g1 = groups[ id1];
             GID id2 = it->second;
+            if ( id2 < id1)
+                swap( id1, id2); // make sure always merge into smaller id
+            Group &g1 = groups[ id1];
             Group &g2 = groups[ id2];
             if ( g1.color == g2.color) {
                 set<Edge> new_edges;
