@@ -5,17 +5,19 @@
 
 #include "kami_state.h"
 #include "distance_map.h"
+#include "state_record.h"
 
 using namespace std;
 
-constexpr int MAX_STEP = 30;
+constexpr int MAX_STEP = 6;
+constexpr int MIN_STEP = 6;
 
 struct Result {
     GID gid;
     char original_color, color;
 };
 
-int dfs( KamiState const &original_state, Result *result, int max_step)
+int dfs( KamiState const &original_state, Result *result, int max_step, StateRecord &record)
 {
     if ( original_state.groups.size() <= 1)
         return 0;
@@ -25,7 +27,10 @@ int dfs( KamiState const &original_state, Result *result, int max_step)
     // consider un-connected graph:
     if ( colors.size() <= 1)
         return 0;
-    if ( colors.size() > max_step + 1)
+    if ( colors.size() > unsigned( max_step + 1))
+        return -1;
+
+    if ( ! record.check_and_insert( original_state))
         return -1;
 
     bool has_usable_color = false;
@@ -64,7 +69,7 @@ int dfs( KamiState const &original_state, Result *result, int max_step)
 
             group.color = color;
             state.merge_group();
-            int ret = dfs( state, result + 1, max_step - 1);
+            int ret = dfs( state, result + 1, max_step - 1, record);
             if ( ret >= 0) {
 #ifdef DEBUG
                 cout << "-------" << endl;
@@ -100,7 +105,7 @@ int dfs( KamiState const &original_state, Result *result, int max_step)
 
                     group.color = color;
                     state.merge_group();
-                    int ret = dfs( state, result + 1, max_step - 1);
+                    int ret = dfs( state, result + 1, max_step - 1, record);
                     if ( ret >= 0)
                         return ret + 1;
                 }
@@ -121,9 +126,10 @@ int main( int argc, char **argv)
     }
     auto start_time = chrono::high_resolution_clock::now();
     Result result[ MAX_STEP];
-    for ( int max_step = 1; max_step <= MAX_STEP; max_step ++) {
+    for ( int max_step = MIN_STEP; max_step <= MAX_STEP; max_step ++) {
         cout << "trying to solve in " << max_step << " step(s)..." << endl;
-        int ret = dfs( state, result, max_step);
+        StateRecord record;
+        int ret = dfs( state, result, max_step, record);
         if ( ret >= 0) {
             cout << "Solution Found:" << endl;
             cout << "\t---------------------" << endl;
